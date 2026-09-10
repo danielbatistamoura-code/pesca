@@ -1,736 +1,1963 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎣 Mega Loja do Tucunaré - Simulador</title>
-    <style>
-        /* Reset e estilo premium */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: #0a1a2a;
-            position: relative;
-            overflow-x: hidden;
-        }
+<title>Mega Loja do Tucunaré</title>
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(30, 80, 120, 0.25) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(20, 60, 100, 0.25) 0%, transparent 50%),
-                linear-gradient(180deg, rgba(10, 30, 50, 0.92) 0%, rgba(5, 20, 35, 0.96) 100%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg opacity='0.08'%3E%3Cpath d='M80,80 Q100,60 120,80 Q140,100 120,120 Q100,140 80,120 Q60,100 80,80Z' fill='%234a8ab5'/%3E%3Ccircle cx='95' cy='95' r='8' fill='%23ffd966'/%3E%3Ccircle cx='110' cy='85' r='5' fill='%23ffd966'/%3E%3Cpath d='M70,70 L60,50 L80,60 Z' fill='%234a8ab5'/%3E%3Cpath d='M130,70 L140,50 L120,60 Z' fill='%234a8ab5'/%3E%3C/g%3E%3C/svg%3E");
-            background-size: cover, cover, cover, 300px 300px;
-            background-position: center, center, center, center;
-            z-index: 0;
-            pointer-events: none;
-        }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        body::after {
-            content: '🐟';
-            position: fixed;
-            bottom: 20px;
-            right: 30px;
-            font-size: 140px;
-            opacity: 0.06;
-            transform: rotate(-8deg);
-            z-index: 0;
-            filter: drop-shadow(0 0 60px rgba(0, 150, 255, 0.15));
-            pointer-events: none;
-        }
+:root{
+    --green:#087443;
+    --green2:#0ca56b;
+    --dark:#071713;
+    --dark2:#0d211b;
+    --card:#ffffff;
+    --text:#14231e;
+    --muted:#71817b;
+    --gold:#f5b942;
+}
 
-        .shop-container {
-            position: relative;
-            z-index: 1;
-            background: rgba(10, 30, 50, 0.93);
-            backdrop-filter: blur(14px);
-            border-radius: 44px;
-            padding: 30px 35px;
-            max-width: 1100px;
-            width: 100%;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
+body{
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    background:#f4f7f5;
+    color:var(--text);
+}
 
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 22px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
-        }
+/* ================= HEADER ================= */
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            color: #c8e2ff;
-            font-size: 1.9rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+.topbar{
+    background:#071713;
+    color:white;
+    padding:8px 6%;
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+}
 
-        .logo .fish-icon { font-size: 2.6rem; filter: drop-shadow(0 0 16px rgba(60, 180, 255, 0.25)); }
-        .logo span {
-            background: #1a4a6a;
-            padding: 4px 16px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 400;
-            color: #8fc8ff;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+header{
+    background:white;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 2px 15px rgba(0,0,0,.08);
+}
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 6px 18px 6px 24px;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+.nav{
+    max-width:1400px;
+    margin:auto;
+    height:78px;
+    display:flex;
+    align-items:center;
+    gap:35px;
+    padding:0 25px;
+}
 
-        .user-info .username { color: #b6d4ff; font-weight: 600; }
-        .user-info .role-badge {
-            background: #1a3a5a;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            color: #8fc8ff;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:22px;
+    font-weight:900;
+    color:#087443;
+    white-space:nowrap;
+}
 
-        .btn-logout {
-            background: #3d2a2a;
-            border: none;
-            color: #ffb0a0;
-            padding: 6px 18px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            border-bottom: 3px solid #1f1414;
-            font-size: 0.85rem;
-        }
-        .btn-logout:hover { background: #5a3a3a; color: #ffccbb; }
+.logo span{
+    font-size:32px;
+}
 
-        /* Login */
-        .login-panel {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            padding: 40px 10px;
-        }
-        .login-panel h2 { color: #c2ddff; font-weight: 300; letter-spacing: 2px; font-size: 2rem; }
-        .login-panel .sub { color: #7a9fc0; font-size: 0.95rem; }
-        .login-form {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-            max-width: 500px;
-            width: 100%;
-        }
-        .login-form input {
-            padding: 14px 22px;
-            border-radius: 40px;
-            border: none;
-            background: #0f1f30;
-            color: #e0f0ff;
-            font-size: 1rem;
-            flex: 1;
-            min-width: 160px;
-            border: 1px solid #1a3a55;
-            outline: none;
-            transition: 0.2s;
-        }
-        .login-form input:focus { border-color: #4d8fc7; box-shadow: 0 0 20px rgba(60, 140, 220, 0.15); }
-        .login-form button {
-            background: #1f6a8f;
-            border: none;
-            border-bottom: 5px solid #0f3a55;
-            padding: 14px 40px;
-            border-radius: 40px;
-            font-weight: 700;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.07s ease;
-            letter-spacing: 0.5px;
-        }
-        .login-form button:active { transform: translateY(3px); border-bottom-width: 2px; }
-        .login-error {
-            color: #ff8a7a;
-            background: rgba(255, 60, 40, 0.1);
-            padding: 8px 24px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 80, 60, 0.2);
-            font-size: 0.9rem;
-        }
-        .login-credentials {
-            color: #5a8aaa;
-            font-size: 0.8rem;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 6px 20px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-        }
+.search{
+    flex:1;
+    position:relative;
+}
 
-        /* Conteúdo */
-        .shop-content { display: none; flex-direction: column; gap: 22px; }
-        .shop-content.active { display: flex; }
+.search input{
+    width:100%;
+    padding:14px 50px 14px 20px;
+    border:1px solid #dce5e1;
+    border-radius:30px;
+    background:#f7f9f8;
+    outline:none;
+    font-size:14px;
+}
 
-        /* Dashboard */
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 14px;
-        }
-        .card {
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 20px;
-            padding: 14px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            text-align: center;
-        }
-        .card h4 { color: #8db4d9; font-weight: 400; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; opacity: 0.7; }
-        .card .value { color: #d6edff; font-size: 1.5rem; font-weight: 700; }
-        .card .value small { font-size: 0.7rem; font-weight: 400; opacity: 0.5; }
-        .card .change { font-size: 0.8rem; margin-top: 2px; color: #8fcbff; }
+.search input:focus{
+    border-color:var(--green2);
+}
 
-        /* Abas */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 4px;
-        }
-        .tab-btn {
-            background: rgba(0, 0, 0, 0.2);
-            border: none;
-            border-bottom: 3px solid transparent;
-            padding: 10px 24px;
-            border-radius: 30px 30px 0 0;
-            color: #8db4d9;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .tab-btn:hover { color: #c2ddff; background: rgba(0, 0, 0, 0.3); }
-        .tab-btn.active {
-            color: #e0f0ff;
-            border-bottom-color: #4d8fc7;
-            background: rgba(30, 70, 110, 0.3);
-        }
+.search button{
+    position:absolute;
+    right:5px;
+    top:5px;
+    border:0;
+    background:var(--green);
+    color:white;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    cursor:pointer;
+}
 
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
-        /* Produtos */
-        .products-section {
-            background: rgba(0, 0, 0, 0.12);
-            border-radius: 20px;
-            padding: 16px 18px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 14px;
-        }
-        .product-item {
-            background: rgba(8, 25, 42, 0.7);
-            border-radius: 18px;
-            padding: 14px 12px 12px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: 0.2s;
-        }
-        .product-item:hover { background: rgba(25, 55, 80, 0.6); border-color: rgba(100, 180, 255, 0.1); transform: translateY(-2px); }
-        .product-item .icon { font-size: 2rem; margin-bottom: 2px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
-        .product-item .name { color: #cee6ff; font-weight: 600; font-size: 0.9rem; }
-        .product-item .price { color: #8fcbff; font-weight: 700; margin: 4px 0 8px; font-size: 1rem; }
-        .product-item .stock { color: #7a9bbd; font-size: 0.7rem; margin-bottom: 8px; }
-        .product-item .btn-action {
-            border: none;
-            border-bottom: 4px solid #0e402a;
-            padding: 7px 12px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.07s ease;
-            width: 100%;
-            font-size: 0.85rem;
-        }
-        .product-item .btn-action:active { transform: translateY(3px); border-bottom-width: 1px; }
-        .product-item .btn-action:disabled { opacity: 0.3; transform: none; border-bottom-width: 4px; cursor: not-allowed; }
-        .btn-sell { background: #1a6a4a; border-bottom-color: #0e402a; }
-        .btn-sell:hover:not(:disabled) { background: #248a5e; }
-        .btn-buy { background: #1a4a6a; border-bottom-color: #0e2a4a; }
-        .btn-buy:hover:not(:disabled) { background: #2a6a8a; }
+.nav-btn{
+    border:0;
+    background:#f1f5f3;
+    padding:12px 15px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+}
 
-        /* Campeonatos */
-        .tournament-section {
-            background: rgba(0, 0, 0, 0.12);
-            border-radius: 20px;
-            padding: 16px 18px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-        }
-        .tournament-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 14px;
-        }
-        .tournament-card {
-            background: rgba(8, 25, 42, 0.7);
-            border-radius: 18px;
-            padding: 16px;
-            text-align: center;
-            border: 1px solid rgba(255, 215, 0, 0.1);
-        }
-        .tournament-card .trophy { font-size: 2.2rem; }
-        .tournament-card .tname { color: #ffd966; font-weight: 700; font-size: 1.1rem; }
-        .tournament-card .tinfo { color: #8db4d9; font-size: 0.8rem; margin: 4px 0; }
-        .tournament-card .tprize { color: #8fcbff; font-weight: 700; font-size: 1.1rem; }
-        .tournament-card .btn-join {
-            background: #6a4a1a;
-            border: none;
-            border-bottom: 4px solid #3a2a0a;
-            padding: 8px 20px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.07s ease;
-            width: 100%;
-            margin-top: 8px;
-        }
-        .tournament-card .btn-join:active { transform: translateY(3px); border-bottom-width: 1px; }
-        .tournament-card .btn-join:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+.cart{
+    position:relative;
+}
 
-        /* Log */
-        .log-area {
-            margin-top: 4px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 18px;
-            padding: 10px 16px;
-            max-height: 80px;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-        }
-        .log-area p { color: #8db4d9; font-size: 0.8rem; padding: 2px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.02); font-family: monospace; }
-        .log-area p:last-child { border-bottom: none; }
-        .log-area::-webkit-scrollbar { width: 4px; }
-        .log-area::-webkit-scrollbar-track { background: transparent; }
-        .log-area::-webkit-scrollbar-thumb { background: #3a6380; border-radius: 10px; }
+.cart-count{
+    position:absolute;
+    top:-5px;
+    right:-5px;
+    background:#ef4444;
+    color:white;
+    width:19px;
+    height:19px;
+    border-radius:50%;
+    font-size:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
 
-        @media (max-width: 700px) {
-            .shop-container { padding: 18px 16px; }
-            .logo { font-size: 1.3rem; }
-            .user-info { padding: 4px 12px 4px 16px; }
-            .product-grid { grid-template-columns: 1fr 1fr; }
-            .tournament-grid { grid-template-columns: 1fr; }
-            .dashboard { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 480px) {
-            .product-grid { grid-template-columns: 1fr 1fr; }
-            .login-form input { min-width: 120px; }
-            .dashboard { grid-template-columns: 1fr; }
-        }
-    </style>
+/* ================= LOGIN ================= */
+
+#loginPanel{
+    min-height:calc(100vh - 120px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+    background:
+        linear-gradient(rgba(3,20,14,.72),rgba(3,20,14,.82)),
+        url("https://loremflickr.com/1600/1000/fishing,nature?lock=25")
+        center/cover;
+}
+
+.login-box{
+    width:430px;
+    max-width:100%;
+    background:rgba(255,255,255,.97);
+    border-radius:25px;
+    padding:40px;
+    box-shadow:0 25px 70px rgba(0,0,0,.4);
+    text-align:center;
+}
+
+.login-logo{
+    font-size:55px;
+}
+
+.login-box h1{
+    margin:10px 0 8px;
+}
+
+.login-box p{
+    color:var(--muted);
+    margin-bottom:25px;
+}
+
+.login-input{
+    width:100%;
+    padding:15px;
+    border:1px solid #dce5e1;
+    border-radius:12px;
+    margin-bottom:12px;
+    outline:none;
+}
+
+.login-button{
+    width:100%;
+    padding:15px;
+    border:0;
+    border-radius:12px;
+    background:var(--green);
+    color:white;
+    font-weight:800;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.login-button:hover{
+    background:#075d36;
+}
+
+.login-error{
+    display:none;
+    color:#dc2626;
+    margin-top:12px;
+    font-size:14px;
+}
+
+/* ================= SITE ================= */
+
+#shopContent{
+    display:none;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+    padding:25px;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    min-height:420px;
+    border-radius:25px;
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    align-items:center;
+    padding:60px;
+    color:white;
+    background:
+        linear-gradient(90deg,rgba(3,25,17,.92),rgba(3,25,17,.35)),
+        url("https://loremflickr.com/1600/700/fishing,bass?lock=33")
+        center/cover;
+    margin-bottom:30px;
+}
+
+.hero-content{
+    max-width:600px;
+}
+
+.hero small{
+    color:#9ee7c7;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:2px;
+}
+
+.hero h1{
+    font-size:50px;
+    line-height:1.05;
+    margin:12px 0;
+}
+
+.hero p{
+    font-size:17px;
+    color:#e0eee9;
+    margin-bottom:25px;
+}
+
+.hero-btn{
+    display:inline-block;
+    padding:14px 25px;
+    background:#0ca56b;
+    color:white;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:800;
+    cursor:pointer;
+    border:0;
+}
+
+/* ================= CATEGORIES ================= */
+
+.categories{
+    display:flex;
+    gap:12px;
+    overflow:auto;
+    margin-bottom:30px;
+}
+
+.category{
+    background:white;
+    border:1px solid #e2ebe7;
+    padding:13px 20px;
+    border-radius:30px;
+    white-space:nowrap;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.category:hover,
+.category.active{
+    background:var(--green);
+    color:white;
+}
+
+/* ================= USER ================= */
+
+.userbar{
+    background:white;
+    padding:14px 18px;
+    border-radius:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.user-name{
+    font-weight:800;
+}
+
+.role{
+    background:#e4f5ed;
+    color:#087443;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:12px;
+    margin-left:8px;
+}
+
+.logout{
+    background:#feecec;
+    color:#c62828;
+    border:0;
+    padding:9px 15px;
+    border-radius:9px;
+    cursor:pointer;
+}
+
+/* ================= DASHBOARD ================= */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:30px;
+}
+
+.stat{
+    background:white;
+    border-radius:17px;
+    padding:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.stat-icon{
+    font-size:27px;
+}
+
+.stat small{
+    color:var(--muted);
+}
+
+.stat strong{
+    display:block;
+    font-size:25px;
+    margin-top:5px;
+}
+
+/* ================= SECTION ================= */
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:30px 0 18px;
+}
+
+.section-title h2{
+    font-size:25px;
+}
+
+.section-title span{
+    color:var(--green);
+    font-weight:700;
+}
+
+/* ================= PRODUCTS ================= */
+
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.product{
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 4px 18px rgba(0,0,0,.06);
+    transition:.25s;
+    position:relative;
+}
+
+.product:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+}
+
+.product-img{
+    height:210px;
+    background:#eef4f1;
+    position:relative;
+    overflow:hidden;
+}
+
+.product-img img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.4s;
+}
+
+.product:hover img{
+    transform:scale(1.06);
+}
+
+.discount{
+    position:absolute;
+    top:12px;
+    left:12px;
+    background:#ef4444;
+    color:white;
+    padding:6px 9px;
+    border-radius:7px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.product-info{
+    padding:16px;
+}
+
+.category-name{
+    font-size:11px;
+    text-transform:uppercase;
+    color:#84928d;
+    font-weight:700;
+}
+
+.product-name{
+    font-weight:800;
+    margin:5px 0;
+    font-size:16px;
+}
+
+.stars{
+    color:#f5b942;
+    font-size:13px;
+}
+
+.price{
+    font-size:21px;
+    font-weight:900;
+    color:#087443;
+    margin:8px 0;
+}
+
+.stock{
+    font-size:12px;
+    color:#71817b;
+    margin-bottom:12px;
+}
+
+.product-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.buy-btn,
+.sell-btn{
+    border:0;
+    padding:10px;
+    border-radius:9px;
+    color:white;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.buy-btn{
+    background:#087443;
+}
+
+.sell-btn{
+    background:#334155;
+}
+
+.buy-btn:hover{
+    background:#065a34;
+}
+
+.sell-btn:hover{
+    background:#1e293b;
+}
+
+button:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+/* ================= PROMO ================= */
+
+.promo{
+    margin:35px 0;
+    min-height:250px;
+    border-radius:22px;
+    overflow:hidden;
+    background:
+        linear-gradient(90deg,rgba(7,48,32,.95),rgba(7,48,32,.4)),
+        url("https://loremflickr.com/1400/500/fishing,lake?lock=46")
+        center/cover;
+    color:white;
+    display:flex;
+    align-items:center;
+    padding:40px;
+}
+
+.promo h2{
+    font-size:35px;
+}
+
+.promo p{
+    margin:10px 0 20px;
+    color:#d7ebe3;
+}
+
+/* ================= TOURNAMENT ================= */
+
+.tournament-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.tournament{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    border:1px solid #e2ebe7;
+    position:relative;
+    overflow:hidden;
+}
+
+.tournament::before{
+    content:"";
+    position:absolute;
+    height:5px;
+    left:0;
+    right:0;
+    top:0;
+    background:linear-gradient(90deg,#087443,#f5b942);
+}
+
+.trophy{
+    font-size:40px;
+}
+
+.tournament h3{
+    margin:8px 0;
+}
+
+.tournament-info{
+    color:#71817b;
+    font-size:13px;
+    line-height:1.8;
+}
+
+.join{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border:0;
+    border-radius:10px;
+    background:#f5b942;
+    font-weight:900;
+    cursor:pointer;
+}
+
+/* ================= HISTORY ================= */
+
+.history{
+    background:#071713;
+    color:#dceee7;
+    border-radius:18px;
+    padding:20px;
+    margin-top:30px;
+}
+
+.history h3{
+    margin-bottom:12px;
+}
+
+.log{
+    max-height:180px;
+    overflow:auto;
+}
+
+.log p{
+    padding:7px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    font-family:monospace;
+    font-size:12px;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    background:#071713;
+    color:#9fb4ac;
+    padding:45px 25px;
+    margin-top:50px;
+}
+
+.footer-inner{
+    max-width:1400px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+    gap:30px;
+}
+
+footer h3{
+    color:white;
+    margin-bottom:12px;
+}
+
+footer p{
+    font-size:13px;
+    line-height:1.7;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1000px){
+    .product-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .dashboard{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .nav{
+        gap:15px;
+    }
+
+    .footer-inner{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:700px){
+    .topbar{
+        display:none;
+    }
+
+    .nav{
+        height:auto;
+        padding:15px;
+        flex-wrap:wrap;
+    }
+
+    .logo{
+        width:100%;
+        justify-content:center;
+    }
+
+    .search{
+        order:3;
+        width:100%;
+    }
+
+    .nav-actions{
+        position:absolute;
+        right:15px;
+        top:15px;
+    }
+
+    .hero{
+        padding:30px;
+        min-height:350px;
+    }
+
+    .hero h1{
+        font-size:35px;
+    }
+
+    .product-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .tournament-grid{
+        grid-template-columns:1fr;
+    }
+
+    .footer-inner{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:450px){
+    .container{
+        padding:15px;
+    }
+
+    .product-grid{
+        grid-template-columns:1fr;
+    }
+
+    .dashboard{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .product-img{
+        height:230px;
+    }
+
+    .userbar{
+        flex-direction:column;
+        gap:10px;
+        align-items:flex-start;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<div class="shop-container" id="app">
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">
-            <span class="fish-icon">🐟</span>
-            Mega Loja do Tucunaré
-            <span>v3.0</span>
+<!-- ================= LOGIN ================= -->
+
+<div id="loginPanel">
+
+    <div class="login-box">
+
+        <div class="login-logo">🎣</div>
+
+        <h1>Mega Loja do Tucunaré</h1>
+
+        <p>
+            Equipamentos, iscas e tudo para sua pescaria.
+        </p>
+
+        <input
+            class="login-input"
+            type="text"
+            id="loginUser"
+            placeholder="Usuário"
+            value="admin"
+        >
+
+        <input
+            class="login-input"
+            type="password"
+            id="loginPass"
+            placeholder="Senha"
+            value="1234"
+        >
+
+        <button class="login-button" id="loginBtn">
+            Entrar na loja
+        </button>
+
+        <div class="login-error" id="loginError">
+            Usuário ou senha inválidos.
         </div>
-        <div class="user-info" id="userInfo">
-            <span class="username" id="usernameDisplay">Visitante</span>
-            <span class="role-badge" id="roleBadge">—</span>
-            <button class="btn-logout" id="logoutBtn" style="display:none;">Sair</button>
-        </div>
+
+        <p style="margin-top:18px;font-size:12px">
+            Demo: admin / 1234
+        </p>
+
     </div>
 
-    <!-- Login -->
-    <div id="loginPanel" class="login-panel">
-        <h2>🎣 Bem-vindo ao Mega Simulador</h2>
-        <div class="sub">Acesse sua conta para vender, comprar e participar de campeonatos</div>
-        <div class="login-form">
-            <input type="text" id="loginUser" placeholder="Usuário" value="admin">
-            <input type="password" id="loginPass" placeholder="Senha" value="1234">
-            <button id="loginBtn">Entrar</button>
-        </div>
-        <div id="loginError" class="login-error" style="display:none;">Usuário ou senha inválidos</div>
-        <div class="login-credentials">🔑 admin / 1234  •  vendedor / 1234  •  comprador / 1234  •  convidado / 1234</div>
-    </div>
-
-    <!-- Conteúdo -->
-    <div id="shopContent" class="shop-content">
-        <!-- Dashboard -->
-        <div class="dashboard">
-            <div class="card"><h4>💰 Saldo</h4><div class="value" id="balanceDisplay">R$ 0,00</div></div>
-            <div class="card"><h4>🎣 Vendas</h4><div class="value" id="soldDisplay">0 <small>itens</small></div></div>
-            <div class="card"><h4>🛒 Compras</h4><div class="value" id="boughtDisplay">0 <small>itens</small></div></div>
-            <div class="card"><h4>📦 Estoque</h4><div class="value" id="stockDisplay">0 <small>un</small></div></div>
-            <div class="card"><h4>🏆 Campeonatos</h4><div class="value" id="tournamentCount">0</div></div>
-        </div>
-
-        <!-- Abas -->
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="tabProducts">🛒 Produtos</button>
-            <button class="tab-btn" data-tab="tabTournaments">🏆 Campeonatos</button>
-            <button class="tab-btn" data-tab="tabHistory">📋 Histórico</button>
-        </div>
-
-        <!-- Tab: Produtos -->
-        <div id="tabProducts" class="tab-content active">
-            <div class="products-section">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-                    <span style="color:#b8d6ff; font-weight:500;">📦 Estoque disponível</span>
-                    <span style="color:#7a9fc0; font-size:0.8rem;">Clique em Vender ou Comprar</span>
-                </div>
-                <div class="product-grid" id="productGrid"></div>
-            </div>
-        </div>
-
-        <!-- Tab: Campeonatos -->
-        <div id="tabTournaments" class="tab-content">
-            <div class="tournament-section">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-                    <span style="color:#ffd966; font-weight:500;">🏆 Campeonatos de Pesca</span>
-                    <span style="color:#7a9fc0; font-size:0.8rem;">Participe e ganhe prêmios!</span>
-                </div>
-                <div class="tournament-grid" id="tournamentGrid"></div>
-            </div>
-        </div>
-
-        <!-- Tab: Histórico -->
-        <div id="tabHistory" class="tab-content">
-            <div class="log-area" id="logArea" style="max-height:200px;">
-                <p>📋 Bem-vindo à Mega Loja do Tucunaré!</p>
-            </div>
-        </div>
-
-        <!-- Log rápido (visível em todas as abas) -->
-        <div class="log-area" id="logAreaMini" style="max-height:60px; margin-top:4px;">
-            <p>📋 Sistema pronto</p>
-        </div>
-    </div>
 </div>
 
+
+<!-- ================= SITE ================= -->
+
+<div id="shopContent">
+
+<header>
+
+    <div class="topbar">
+        <span>🚚 Frete grátis acima de R$ 299</span>
+        <span>🔒 Compra segura • Atendimento especializado</span>
+    </div>
+
+    <div class="nav">
+
+        <div class="logo">
+            <span>🎣</span>
+            Tucunaré
+        </div>
+
+        <div class="search">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="O que você está procurando?"
+            >
+
+            <button>🔎</button>
+
+        </div>
+
+        <div class="nav-actions">
+
+            <button class="nav-btn">
+                👤 Minha conta
+            </button>
+
+            <button class="nav-btn cart">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <!-- USUÁRIO -->
+
+    <div class="userbar">
+
+        <div>
+            Olá, <span class="user-name" id="usernameDisplay">Visitante</span>
+            <span class="role" id="roleBadge">—</span>
+        </div>
+
+        <button class="logout" id="logoutBtn">
+            Sair
+        </button>
+
+    </div>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <small>Equipamentos para pescadores</small>
+
+            <h1>
+                Sua próxima<br>
+                grande pescaria começa aqui.
+            </h1>
+
+            <p>
+                Carretilhas, varas, iscas, barcos e acessórios
+                selecionados para quem leva a pesca a sério.
+            </p>
+
+            <button class="hero-btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+                Comprar agora →
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- CATEGORIAS -->
+
+    <div class="categories">
+
+        <button class="category active" data-category="todos">
+            🔥 Todos
+        </button>
+
+        <button class="category" data-category="carretilha">
+            🎣 Carretilhas
+        </button>
+
+        <button class="category" data-category="molinete">
+            🌀 Molinetes
+        </button>
+
+        <button class="category" data-category="isca">
+            🐟 Iscas
+        </button>
+
+        <button class="category" data-category="vara">
+            🎣 Varas
+        </button>
+
+        <button class="category" data-category="barco">
+            🚤 Barcos
+        </button>
+
+        <button class="category" data-category="acessório">
+            🧰 Acessórios
+        </button>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <div class="dashboard">
+
+        <div class="stat">
+            <div class="stat-icon">💰</div>
+            <small>Saldo disponível</small>
+            <strong id="balanceDisplay">R$ 0,00</strong>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">📦</div>
+            <small>Estoque</small>
+            <strong id="stockDisplay">0</strong>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🛒</div>
+            <small>Compras</small>
+            <strong id="boughtDisplay">0</strong>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🏆</div>
+            <small>Campeonatos ganhos</small>
+            <strong id="tournamentCount">0</strong>
+        </div>
+
+    </div>
+
+
+    <!-- PRODUTOS -->
+
+    <section id="products">
+
+        <div class="section-title">
+
+            <h2>Produtos em destaque</h2>
+
+            <span>Ver todos →</span>
+
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+
+    </section>
+
+
+    <!-- PROMO -->
+
+    <section class="promo">
+
+        <div>
+
+            <h2>Prepare seu equipamento 🎣</h2>
+
+            <p>
+                Encontre tudo que você precisa para sua próxima pescaria.
+            </p>
+
+            <button class="hero-btn">
+                Conferir ofertas
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- CAMPEONATOS -->
+
+    <section>
+
+        <div class="section-title">
+
+            <h2>🏆 Campeonatos de pesca</h2>
+
+            <span>Participe e concorra a prêmios</span>
+
+        </div>
+
+        <div class="tournament-grid" id="tournamentGrid"></div>
+
+    </section>
+
+
+    <!-- HISTÓRICO -->
+
+    <section class="history">
+
+        <h3>📋 Atividades recentes</h3>
+
+        <div class="log" id="logArea">
+
+            <p>📋 Sistema pronto.</p>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-inner">
+
+        <div>
+            <h3>🎣 Mega Loja do Tucunaré</h3>
+
+            <p>
+                A loja do pescador que procura bons equipamentos,
+                variedade e praticidade.
+            </p>
+        </div>
+
+        <div>
+            <h3>Atendimento</h3>
+            <p>📞 (43) 99999-9999</p>
+            <p>📧 contato@tucunare.com</p>
+        </div>
+
+        <div>
+            <h3>Institucional</h3>
+            <p>Sobre nós</p>
+            <p>Política de troca</p>
+            <p>Privacidade</p>
+        </div>
+
+        <div>
+            <h3>Pagamento</h3>
+            <p>💳 Cartão</p>
+            <p>💵 Pix</p>
+            <p>📦 Boleto</p>
+        </div>
+
+    </div>
+
+</footer>
+
+</div>
+
+
 <script>
-    (function() {
-        'use strict';
 
-        // ---------- USUÁRIOS ----------
-        const USERS = [
-            { username: 'admin', password: '1234', role: 'admin' },
-            { username: 'vendedor', password: '1234', role: 'seller' },
-            { username: 'comprador', password: '1234', role: 'buyer' },
-            { username: 'convidado', password: '1234', role: 'guest' }
-        ];
+(function(){
 
-        // ---------- ESTADO ----------
-        let currentUser = null;
-        let balance = 1200.00;
-        let totalSold = 0;
-        let totalBought = 0;
-        let tournamentsWon = 0;
-        let logHistory = [];
+"use strict";
 
-        // Produtos expandidos (carretilhas, molinetes, iscas, barcos, acessórios)
-        const products = [
-            // Carretilhas
-            { id: 1, name: 'Carretilha Pro Max', icon: '🎣', price: 129.90, stock: 8, category: 'carretilha' },
-            { id: 2, name: 'Carretilha Sport', icon: '🎣', price: 69.90, stock: 12, category: 'carretilha' },
-            { id: 3, name: 'Carretilha Elite', icon: '🎣', price: 189.90, stock: 5, category: 'carretilha' },
-            // Molinetes
-            { id: 4, name: 'Molinete 3000', icon: '🌀', price: 55.90, stock: 15, category: 'molinete' },
-            { id: 5, name: 'Molinete 5000', icon: '🌀', price: 82.00, stock: 9, category: 'molinete' },
-            { id: 6, name: 'Molinete 8000', icon: '🌀', price: 145.00, stock: 4, category: 'molinete' },
-            // Iscas
-            { id: 7, name: 'Isca Artificial (pequena)', icon: '🐛', price: 18.30, stock: 30, category: 'isca' },
-            { id: 8, name: 'Isca de Superfície', icon: '🦐', price: 24.50, stock: 22, category: 'isca' },
-            { id: 9, name: 'Isca de Fundo', icon: '🪱', price: 16.80, stock: 28, category: 'isca' },
-            { id: 10, name: 'Isca Viva (artificial)', icon: '🦟', price: 12.90, stock: 35, category: 'isca' },
-            { id: 11, name: 'Isca de Chumbo', icon: '🎯', price: 9.90, stock: 40, category: 'isca' },
-            // Barcos
-            { id: 12, name: 'Barco a Remo', icon: '🚣', price: 380.00, stock: 4, category: 'barco' },
-            { id: 13, name: 'Barco Inflável 2p', icon: '⛵', price: 520.00, stock: 3, category: 'barco' },
-            { id: 14, name: 'Barco Inflável 4p', icon: '⛵', price: 750.00, stock: 2, category: 'barco' },
-            // Acessórios
-            { id: 15, name: 'Caixa de Pesca', icon: '🧰', price: 42.00, stock: 10, category: 'acessório' },
-            { id: 16, name: 'Bóia de Pesca', icon: '🔴', price: 6.90, stock: 45, category: 'acessório' },
-            { id: 17, name: 'Linha de Nylon 100m', icon: '🧵', price: 15.90, stock: 25, category: 'acessório' },
-            { id: 18, name: 'Anzol Pacote (50)', icon: '🪝', price: 9.50, stock: 30, category: 'acessório' },
-            { id: 19, name: 'Chumbada Pacote', icon: '⚫', price: 7.80, stock: 35, category: 'acessório' },
-            { id: 20, name: 'Vara de Pesca 2m', icon: '🎣', price: 65.00, stock: 12, category: 'vara' },
-            { id: 21, name: 'Vara de Pesca 3m', icon: '🎣', price: 95.00, stock: 8, category: 'vara' },
-            { id: 22, name: 'Vara Telescópica', icon: '🎣', price: 145.00, stock: 5, category: 'vara' }
-        ];
 
-        // Campeonatos
-        const tournaments = [
-            { id: 1, name: 'Tucunaré Trophy', prize: 300, fee: 50, participants: 0, maxParticipants: 10, active: true },
-            { id: 2, name: 'Pesca Noturna', prize: 200, fee: 30, participants: 0, maxParticipants: 8, active: true },
-            { id: 3, name: 'Campeonato de Iscas', prize: 150, fee: 20, participants: 0, maxParticipants: 6, active: true },
-            { id: 4, name: 'Mega Pesca do Ano', prize: 500, fee: 100, participants: 0, maxParticipants: 12, active: true },
-            { id: 5, name: 'Desafio do Barco', prize: 250, fee: 45, participants: 0, maxParticipants: 8, active: true }
-        ];
+/* ================= USUÁRIOS ================= */
 
-        // ---------- DOM ----------
-        const loginPanel = document.getElementById('loginPanel');
-        const shopContent = document.getElementById('shopContent');
-        const usernameDisplay = document.getElementById('usernameDisplay');
-        const roleBadge = document.getElementById('roleBadge');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const loginUser = document.getElementById('loginUser');
-        const loginPass = document.getElementById('loginPass');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginError = document.getElementById('loginError');
-        const balanceDisplay = document.getElementById('balanceDisplay');
-        const soldDisplay = document.getElementById('soldDisplay');
-        const boughtDisplay = document.getElementById('boughtDisplay');
-        const stockDisplay = document.getElementById('stockDisplay');
-        const tournamentCount = document.getElementById('tournamentCount');
-        const productGrid = document.getElementById('productGrid');
-        const tournamentGrid = document.getElementById('tournamentGrid');
-        const logArea = document.getElementById('logArea');
-        const logAreaMini = document.getElementById('logAreaMini');
+const USERS = [
 
-        // ---------- FUNÇÕES ----------
-        function formatCurrency(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+    {
+        username:"admin",
+        password:"1234",
+        role:"admin"
+    },
 
-        function totalStock() { return products.reduce((a, p) => a + p.stock, 0); }
+    {
+        username:"vendedor",
+        password:"1234",
+        role:"seller"
+    },
 
-        function addLog(msg, type = 'info') {
-            const prefix = type === 'venda' ? '💰' : type === 'compra' ? '🛒' : type === 'torneio' ? '🏆' : type === 'erro' ? '⚠️' : '📋';
-            const entry = `${prefix} ${msg}`;
-            logHistory.unshift(entry);
-            if (logHistory.length > 50) logHistory.pop();
-            renderLogs();
-        }
+    {
+        username:"comprador",
+        password:"1234",
+        role:"buyer"
+    },
 
-        function renderLogs() {
-            const html = logHistory.map(m => `<p>${m}</p>`).join('');
-            logArea.innerHTML = html;
-            logAreaMini.innerHTML = logHistory.slice(0, 3).map(m => `<p>${m}</p>`).join('');
-        }
+    {
+        username:"convidado",
+        password:"1234",
+        role:"guest"
+    }
 
-        function updateDashboard() {
-            balanceDisplay.textContent = formatCurrency(balance);
-            soldDisplay.textContent = totalSold;
-            boughtDisplay.textContent = totalBought;
-            stockDisplay.textContent = totalStock();
-            tournamentCount.textContent = tournamentsWon;
-        }
+];
 
-        // ---------- RENDER PRODUTOS ----------
-        function renderProducts() {
-            productGrid.innerHTML = '';
-            products.forEach(p => {
-                const div = document.createElement('div');
-                div.className = 'product-item';
-                const stockText = p.stock > 0 ? `Estoque: ${p.stock}` : '❌ Esgotado';
-                const canSell = currentUser && (currentUser.role === 'admin' || currentUser.role === 'seller');
-                const canBuy = currentUser && (currentUser.role === 'admin' || currentUser.role === 'buyer');
-                div.innerHTML = `
-                    <div class="icon">${p.icon}</div>
-                    <div class="name">${p.name}</div>
-                    <div class="price">${formatCurrency(p.price)}</div>
-                    <div class="stock">${stockText}</div>
-                    <div style="display:flex; gap:6px;">
-                        <button class="btn-action btn-sell" data-id="${p.id}" ${(!canSell || p.stock <= 0) ? 'disabled' : ''}>
-                            ${p.stock > 0 ? 'Vender' : '—'}
-                        </button>
-                        <button class="btn-action btn-buy" data-id="${p.id}" ${!canBuy ? 'disabled' : ''}>
-                            Comprar
-                        </button>
-                    </div>
-                `;
-                productGrid.appendChild(div);
-            });
 
-            document.querySelectorAll('.btn-sell').forEach(b => {
-                b.addEventListener('click', function() { handleSell(parseInt(this.dataset.id)); });
-            });
-            document.querySelectorAll('.btn-buy').forEach(b => {
-                b.addEventListener('click', function() { handleBuy(parseInt(this.dataset.id)); });
-            });
-        }
+/* ================= ESTADO ================= */
 
-        // ---------- VENDER ----------
-        function handleSell(id) {
-            if (!currentUser) { addLog('Faça login para vender.', 'erro'); return; }
-            if (currentUser.role !== 'admin' && currentUser.role !== 'seller') {
-                addLog('Permissão negada: apenas vendedores podem vender.', 'erro');
-                return;
-            }
-            const p = products.find(x => x.id === id);
-            if (!p) return;
-            if (p.stock <= 0) { addLog(`"${p.name}" esgotado.`, 'erro'); return; }
-            balance += p.price;
-            p.stock--;
-            totalSold++;
-            addLog(`Venda de "${p.name}" por ${formatCurrency(p.price)}`, 'venda');
-            updateDashboard();
-            renderProducts();
-        }
+let currentUser = null;
 
-        // ---------- COMPRAR ----------
-        function handleBuy(id) {
-            if (!currentUser) { addLog('Faça login para comprar.', 'erro'); return; }
-            if (currentUser.role !== 'admin' && currentUser.role !== 'buyer') {
-                addLog('Permissão negada: apenas compradores podem comprar.', 'erro');
-                return;
-            }
-            const p = products.find(x => x.id === id);
-            if (!p) return;
-            if (balance < p.price) { addLog(`Saldo insuficiente para comprar "${p.name}".`, 'erro'); return; }
-            balance -= p.price;
-            p.stock++;
-            totalBought++;
-            addLog(`Compra de "${p.name}" por ${formatCurrency(p.price)}`, 'compra');
-            updateDashboard();
-            renderProducts();
-        }
+let balance = 1200;
 
-        // ---------- CAMPEONATOS ----------
-        function renderTournaments() {
-            tournamentGrid.innerHTML = '';
-            tournaments.forEach(t => {
-                const div = document.createElement('div');
-                div.className = 'tournament-card';
-                const canJoin = currentUser && (currentUser.role === 'admin' || currentUser.role === 'seller' || currentUser.role === 'buyer');
-                div.innerHTML = `
-                    <div class="trophy">🏆</div>
-                    <div class="tname">${t.name}</div>
-                    <div class="tinfo">💰 Prêmio: ${formatCurrency(t.prize)} • Taxa: ${formatCurrency(t.fee)}</div>
-                    <div class="tinfo">👥 ${t.participants}/${t.maxParticipants} participantes</div>
-                    <button class="btn-join" data-id="${t.id}" ${(!canJoin || !t.active || t.participants >= t.maxParticipants) ? 'disabled' : ''}>
-                        ${t.participants >= t.maxParticipants ? 'Lotado' : 'Participar'}
+let totalBought = 0;
+
+let totalSold = 0;
+
+let tournamentsWon = 0;
+
+let cart = 0;
+
+let logs = [];
+
+
+/* ================= PRODUTOS ================= */
+
+const products = [
+
+{
+id:1,
+name:"Carretilha Pro Max",
+price:129.90,
+stock:8,
+category:"carretilha",
+image:"https://loremflickr.com/700/500/fishing,reel?lock=1"
+},
+
+{
+id:2,
+name:"Carretilha Sport",
+price:69.90,
+stock:12,
+category:"carretilha",
+image:"https://loremflickr.com/700/500/fishing,reel?lock=2"
+},
+
+{
+id:3,
+name:"Carretilha Elite",
+price:189.90,
+stock:5,
+category:"carretilha",
+image:"https://loremflickr.com/700/500/fishing,reel?lock=3"
+},
+
+{
+id:4,
+name:"Molinete 3000",
+price:55.90,
+stock:15,
+category:"molinete",
+image:"https://loremflickr.com/700/500/fishing,reel?lock=4"
+},
+
+{
+id:5,
+name:"Molinete 5000",
+price:82,
+stock:9,
+category:"molinete",
+image:"https://loremflickr.com/700/500/fishing,reel?lock=5"
+},
+
+{
+id:6,
+name:"Molinete 8000",
+price:145,
+stock:4,
+category:"molinete",
+image:"https://loremflickr.com/700/500/fishing,reel?lock=6"
+},
+
+{
+id:7,
+name:"Isca Artificial Pro",
+price:18.30,
+stock:30,
+category:"isca",
+image:"https://loremflickr.com/700/500/fishing,lure?lock=7"
+},
+
+{
+id:8,
+name:"Isca de Superfície",
+price:24.50,
+stock:22,
+category:"isca",
+image:"https://loremflickr.com/700/500/fishing,lure?lock=8"
+},
+
+{
+id:9,
+name:"Isca de Fundo",
+price:16.80,
+stock:28,
+category:"isca",
+image:"https://loremflickr.com/700/500/fishing,lure?lock=9"
+},
+
+{
+id:10,
+name:"Isca Viva Artificial",
+price:12.90,
+stock:35,
+category:"isca",
+image:"https://loremflickr.com/700/500/fishing,lure?lock=10"
+},
+
+{
+id:11,
+name:"Vara de Pesca 2m",
+price:65,
+stock:12,
+category:"vara",
+image:"https://loremflickr.com/700/500/fishing,rod?lock=11"
+},
+
+{
+id:12,
+name:"Vara de Pesca 3m",
+price:95,
+stock:8,
+category:"vara",
+image:"https://loremflickr.com/700/500/fishing,rod?lock=12"
+},
+
+{
+id:13,
+name:"Vara Telescópica",
+price:145,
+stock:5,
+category:"vara",
+image:"https://loremflickr.com/700/500/fishing,rod?lock=13"
+},
+
+{
+id:14,
+name:"Barco a Remo",
+price:380,
+stock:4,
+category:"barco",
+image:"https://loremflickr.com/700/500/fishing,boat?lock=14"
+},
+
+{
+id:15,
+name:"Barco Inflável 2 Pessoas",
+price:520,
+stock:3,
+category:"barco",
+image:"https://loremflickr.com/700/500/fishing,boat?lock=15"
+},
+
+{
+id:16,
+name:"Caixa de Pesca",
+price:42,
+stock:10,
+category:"acessório",
+image:"https://loremflickr.com/700/500/fishing,tackle?lock=16"
+}
+
+];
+
+
+/* ================= CAMPEONATOS ================= */
+
+const tournaments = [
+
+{
+name:"Tucunaré Trophy",
+prize:300,
+fee:50,
+participants:0,
+max:10
+},
+
+{
+name:"Pesca Noturna",
+prize:200,
+fee:30,
+participants:0,
+max:8
+},
+
+{
+name:"Mega Pesca do Ano",
+prize:500,
+fee:100,
+participants:0,
+max:12
+}
+
+];
+
+
+/* ================= ELEMENTOS ================= */
+
+const loginPanel =
+document.getElementById("loginPanel");
+
+const shopContent =
+document.getElementById("shopContent");
+
+const loginBtn =
+document.getElementById("loginBtn");
+
+const loginUser =
+document.getElementById("loginUser");
+
+const loginPass =
+document.getElementById("loginPass");
+
+const loginError =
+document.getElementById("loginError");
+
+const logoutBtn =
+document.getElementById("logoutBtn");
+
+const usernameDisplay =
+document.getElementById("usernameDisplay");
+
+const roleBadge =
+document.getElementById("roleBadge");
+
+const productGrid =
+document.getElementById("productGrid");
+
+const tournamentGrid =
+document.getElementById("tournamentGrid");
+
+const logArea =
+document.getElementById("logArea");
+
+const searchInput =
+document.getElementById("searchInput");
+
+
+/* ================= UTIL ================= */
+
+function money(value){
+
+    return "R$ " +
+    value.toFixed(2).replace(".",",");
+
+}
+
+
+function totalStock(){
+
+    return products.reduce(
+        (total,p)=>total+p.stock,
+        0
+    );
+
+}
+
+
+function addLog(text){
+
+    logs.unshift(
+        "📋 " + text
+    );
+
+    if(logs.length > 30)
+        logs.pop();
+
+    logArea.innerHTML =
+        logs.map(
+            x=>`<p>${x}</p>`
+        ).join("");
+
+}
+
+
+function updateDashboard(){
+
+    document.getElementById(
+        "balanceDisplay"
+    ).textContent = money(balance);
+
+    document.getElementById(
+        "stockDisplay"
+    ).textContent = totalStock();
+
+    document.getElementById(
+        "boughtDisplay"
+    ).textContent = totalBought;
+
+    document.getElementById(
+        "tournamentCount"
+    ).textContent = tournamentsWon;
+
+    document.getElementById(
+        "cartCount"
+    ).textContent = cart;
+
+}
+
+
+/* ================= PRODUTOS ================= */
+
+function renderProducts(
+    category="todos",
+    search=""
+){
+
+    productGrid.innerHTML="";
+
+    const filtered =
+    products.filter(p=>{
+
+        const categoryOK =
+            category==="todos" ||
+            p.category===category;
+
+        const searchOK =
+            p.name
+            .toLowerCase()
+            .includes(
+                search.toLowerCase()
+            );
+
+        return categoryOK && searchOK;
+
+    });
+
+
+    filtered.forEach(p=>{
+
+        const canBuy =
+            currentUser &&
+            (
+                currentUser.role==="admin" ||
+                currentUser.role==="buyer"
+            );
+
+        const canSell =
+            currentUser &&
+            (
+                currentUser.role==="admin" ||
+                currentUser.role==="seller"
+            );
+
+
+        const div =
+        document.createElement("div");
+
+        div.className="product";
+
+
+        div.innerHTML=`
+
+            <div class="product-img">
+
+                ${
+                    p.id<=5
+                    ? `<div class="discount">OFERTA</div>`
+                    : ""
+                }
+
+                <img
+                    src="${p.image}"
+                    alt="${p.name}"
+                    loading="lazy"
+                >
+
+            </div>
+
+            <div class="product-info">
+
+                <div class="category-name">
+                    ${p.category}
+                </div>
+
+                <div class="product-name">
+                    ${p.name}
+                </div>
+
+                <div class="stars">
+                    ★★★★★
+                    <span style="color:#89958f">
+                        (4.${p.id})
+                    </span>
+                </div>
+
+                <div class="price">
+                    ${money(p.price)}
+                </div>
+
+                <div class="stock">
+                    ${
+                        p.stock>0
+                        ? "✓ "+p.stock+" unidades disponíveis"
+                        : "❌ Produto esgotado"
+                    }
+                </div>
+
+                <div class="product-buttons">
+
+                    <button
+                        class="buy-btn"
+                        data-buy="${p.id}"
+                        ${
+                            (!canBuy || p.stock<=0)
+                            ? "disabled"
+                            : ""
+                        }
+                    >
+                        🛒 Comprar
                     </button>
-                `;
-                tournamentGrid.appendChild(div);
-            });
 
-            document.querySelectorAll('.btn-join').forEach(b => {
-                b.addEventListener('click', function() { handleJoinTournament(parseInt(this.dataset.id)); });
-            });
-        }
+                    <button
+                        class="sell-btn"
+                        data-sell="${p.id}"
+                        ${
+                            (!canSell || p.stock<=0)
+                            ? "disabled"
+                            : ""
+                        }
+                    >
+                        💰 Vender
+                    </button>
 
-        function handleJoinTournament(id) {
-            if (!currentUser) { addLog('Faça login para participar.', 'erro'); return; }
-            const t = tournaments.find(x => x.id === id);
-            if (!t) return;
-            if (!t.active) { addLog('Campeonato inativo.', 'erro'); return; }
-            if (t.participants >= t.maxParticipants) { addLog('Campeonato lotado.', 'erro'); return; }
-            if (balance < t.fee) { addLog(`Saldo insuficiente para pagar a taxa de ${formatCurrency(t.fee)}.`, 'erro'); return; }
-            balance -= t.fee;
-            t.participants++;
-            // 30% de chance de ganhar (simulação)
-            const win = Math.random() < 0.3;
-            if (win) {
-                balance += t.prize;
-                tournamentsWon++;
-                addLog(`🏆 Vitória no campeonato "${t.name}"! Ganhou ${formatCurrency(t.prize)}`, 'torneio');
-            } else {
-                addLog(`Participou do campeonato "${t.name}" mas não venceu.`, 'torneio');
-            }
-            updateDashboard();
-            renderTournaments();
-        }
+                </div>
 
-        // ---------- TABS ----------
-        function initTabs() {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                    document.getElementById(this.dataset.tab).classList.add('active');
-                });
-            });
-        }
+            </div>
 
-        // ---------- LOGIN / LOGOUT ----------
-        function doLogin(user, pass) {
-            const u = USERS.find(x => x.username === user && x.password === pass);
-            if (!u) { loginError.style.display = 'block'; return false; }
-            loginError.style.display = 'none';
-            currentUser = u;
-            usernameDisplay.textContent = u.username;
-            roleBadge.textContent = u.role;
-            logoutBtn.style.display = 'inline-block';
-            loginPanel.style.display = 'none';
-            shopContent.classList.add('active');
-            addLog(`Usuário "${u.username}" logado (${u.role}).`, 'info');
-            updateDashboard();
-            renderProducts();
-            renderTournaments();
-            return true;
-        }
+        `;
 
-        function doLogout() {
-            currentUser = null;
-            usernameDisplay.textContent = 'Visitante';
-            roleBadge.textContent = '—';
-            logoutBtn.style.display = 'none';
-            loginPanel.style.display = 'flex';
-            shopContent.classList.remove('active');
-            addLog('Logout realizado.', 'info');
-            loginUser.value = 'admin';
-            loginPass.value = '1234';
-            loginError.style.display = 'none';
-        }
+        productGrid.appendChild(div);
 
-        // ---------- INICIALIZAÇÃO ----------
-        function init() {
-            loginBtn.addEventListener('click', () => doLogin(loginUser.value.trim(), loginPass.value.trim()));
-            loginUser.addEventListener('keydown', e => { if (e.key === 'Enter') loginBtn.click(); });
-            loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') loginBtn.click(); });
-            logoutBtn.addEventListener('click', doLogout);
-            initTabs();
+    });
 
-            doLogout();
-            renderProducts();
-            renderTournaments();
-            updateDashboard();
-            addLog('🔄 Sistema pronto. Faça login para começar.');
-        }
 
-        init();
-    })();
+    document
+    .querySelectorAll("[data-buy]")
+    .forEach(btn=>{
+
+        btn.onclick=()=>{
+            buyProduct(
+                Number(btn.dataset.buy)
+            );
+        };
+
+    });
+
+
+    document
+    .querySelectorAll("[data-sell]")
+    .forEach(btn=>{
+
+        btn.onclick=()=>{
+            sellProduct(
+                Number(btn.dataset.sell)
+            );
+        };
+
+    });
+
+}
+
+
+/* ================= COMPRAR ================= */
+
+function buyProduct(id){
+
+    if(!currentUser)
+        return;
+
+    if(
+        currentUser.role!=="buyer" &&
+        currentUser.role!=="admin"
+    ){
+
+        addLog(
+            "Você não possui permissão para comprar."
+        );
+
+        return;
+    }
+
+
+    const p =
+    products.find(x=>x.id===id);
+
+
+    if(balance<p.price){
+
+        addLog(
+            "Saldo insuficiente para comprar "+p.name+"."
+        );
+
+        return;
+    }
+
+
+    if(p.stock<=0){
+
+        addLog(
+            p.name+" está esgotado."
+        );
+
+        return;
+    }
+
+
+    balance-=p.price;
+
+    p.stock--;
+
+    totalBought++;
+
+    cart++;
+
+
+    addLog(
+        `Compra realizada: ${p.name} por ${money(p.price)}.`
+    );
+
+
+    updateDashboard();
+
+    renderProducts();
+
+}
+
+
+/* ================= VENDER ================= */
+
+function sellProduct(id){
+
+    if(!currentUser)
+        return;
+
+    if(
+        currentUser.role!=="seller" &&
+        currentUser.role!=="admin"
+    ){
+
+        addLog(
+            "Você não possui permissão para vender."
+        );
+
+        return;
+    }
+
+
+    const p =
+    products.find(x=>x.id===id);
+
+
+    if(p.stock<=0){
+
+        addLog(
+            "Produto esgotado."
+        );
+
+        return;
+    }
+
+
+    p.stock--;
+
+    balance+=p.price;
+
+    totalSold++;
+
+
+    addLog(
+        `Venda realizada: ${p.name} por ${money(p.price)}.`
+    );
+
+
+    updateDashboard();
+
+    renderProducts();
+
+}
+
+
+/* ================= CAMPEONATOS ================= */
+
+function renderTournaments(){
+
+    tournamentGrid.innerHTML="";
+
+
+    tournaments.forEach((t,i)=>{
+
+        const div =
+        document.createElement("div");
+
+        div.className="tournament";
+
+
+        div.innerHTML=`
+
+            <div class="trophy">🏆</div>
+
+            <h3>${t.name}</h3>
+
+            <div class="tournament-info">
+
+                💰 Prêmio:
+                <strong>
+                    ${money(t.prize)}
+                </strong>
+
+                <br>
+
+                🎟️ Taxa:
+                ${money(t.fee)}
+
+                <br>
+
+                👥 ${t.participants}/${t.max}
+                participantes
+
+            </div>
+
+            <button
+                class="join"
+                data-tournament="${i}"
+            >
+                Participar
+            </button>
+
+        `;
+
+        tournamentGrid.appendChild(div);
+
+    });
+
+
+    document
+    .querySelectorAll("[data-tournament]")
+    .forEach(btn=>{
+
+        btn.onclick=()=>{
+
+            joinTournament(
+                Number(btn.dataset.tournament)
+            );
+
+        };
+
+    });
+
+}
+
+
+function joinTournament(index){
+
+    if(!currentUser)
+        return;
+
+
+    const t =
+    tournaments[index];
+
+
+    if(balance<t.fee){
+
+        addLog(
+            "Saldo insuficiente para participar."
+        );
+
+        return;
+    }
+
+
+    if(t.participants>=t.max){
+
+        addLog(
+            "Esse campeonato está lotado."
+        );
+
+        return;
+    }
+
+
+    balance-=t.fee;
+
+    t.participants++;
+
+
+    const won =
+    Math.random()<0.3;
+
+
+    if(won){
+
+        balance+=t.prize;
+
+        tournamentsWon++;
+
+
+        addLog(
+            `🏆 Você venceu o ${t.name} e ganhou ${money(t.prize)}!`
+        );
+
+    }else{
+
+        addLog(
+            `Você participou do ${t.name}, mas não venceu.`
+        );
+
+    }
+
+
+    updateDashboard();
+
+    renderTournaments();
+
+}
+
+
+/* ================= LOGIN ================= */
+
+function login(){
+
+    const user =
+    USERS.find(
+        u=>
+        u.username===loginUser.value.trim() &&
+        u.password===loginPass.value.trim()
+    );
+
+
+    if(!user){
+
+        loginError.style.display="block";
+
+        return;
+
+    }
+
+
+    loginError.style.display="none";
+
+    currentUser=user;
+
+    usernameDisplay.textContent =
+        user.username;
+
+    roleBadge.textContent =
+        user.role;
+
+
+    loginPanel.style.display="none";
+
+    shopContent.style.display="block";
+
+
+    addLog(
+        `Login realizado como ${user.username}.`
+    );
+
+
+    updateDashboard();
+
+    renderProducts();
+
+    renderTournaments();
+
+}
+
+
+function logout(){
+
+    currentUser=null;
+
+    loginPanel.style.display="flex";
+
+    shopContent.style.display="none";
+
+}
+
+
+/* ================= EVENTOS ================= */
+
+loginBtn.onclick=login;
+
+loginPass.onkeydown=e=>{
+
+    if(e.key==="Enter")
+        login();
+
+};
+
+
+loginUser.onkeydown=e=>{
+
+    if(e.key==="Enter")
+        login();
+
+};
+
+
+logoutBtn.onclick=logout;
+
+
+/* ================= PESQUISA ================= */
+
+searchInput.oninput=()=>{
+
+    const active =
+    document.querySelector(
+        ".category.active"
+    );
+
+    renderProducts(
+        active.dataset.category,
+        searchInput.value
+    );
+
+};
+
+
+/* ================= CATEGORIAS ================= */
+
+document
+.querySelectorAll(".category")
+.forEach(btn=>{
+
+    btn.onclick=()=>{
+
+        document
+        .querySelectorAll(".category")
+        .forEach(x=>
+            x.classList.remove("active")
+        );
+
+        btn.classList.add("active");
+
+
+        renderProducts(
+            btn.dataset.category,
+            searchInput.value
+        );
+
+    };
+
+});
+
+
+/* ================= START ================= */
+
+renderProducts();
+
+renderTournaments();
+
+updateDashboard();
+
+addLog(
+    "Sistema da Mega Loja iniciado."
+);
+
+})();
+
 </script>
+
 </body>
 </html>
+```
