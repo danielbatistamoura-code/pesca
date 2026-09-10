@@ -1,0 +1,13 @@
+.shop-container::after {
+    content: "🔒 https://seusite.com/shop";
+    display: block;
+    order: -1;                        /* só funciona se for flex/grid */
+    height: 32px;
+    line-height: 32px;
+    padding: 0 16px;
+    font-size: 12px;
+    color: #b8b8b8;
+    background: #151517;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-family: monospace;
+}
